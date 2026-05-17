@@ -1,0 +1,6 @@
+packages:
+  - "apps/*"
+  - "agents"
+  - "agent-starter"
+  - "packages/*"
+  - "scripts"

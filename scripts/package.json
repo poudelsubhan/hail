@@ -1,0 +1,14 @@
+{
+  "name": "@ac/scripts",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": {
+    "@ac/llm": "workspace:*",
+    "@ac/contracts": "workspace:*",
+    "@ac/agents": "workspace:*",
+    "tsx": "^4.19.2",
+    "ws": "^8.18.0",
+    "@types/ws": "^8.5.13"
+  }
+}

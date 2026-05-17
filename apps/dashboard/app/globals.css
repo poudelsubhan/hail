@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: #0a0a0a;
+  color: #e5e5e5;
+}
+
+/* Projector mode bumps font size for stage demo. */
+html.projector {
+  font-size: 22px;
+}
+
+/* Quick flash highlight for newly-arrived events / agents. */
+@keyframes flash {
+  0% {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.flash {
+  animation: flash 1.4s ease-out;
+}
+
+/* Floating reputation delta chip — drifts up and fades. */
+@keyframes rep-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-32px);
+  }
+}
+
+.rep-rise {
+  animation: rep-rise 1.6s ease-out forwards;
+}

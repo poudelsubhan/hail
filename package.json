@@ -1,0 +1,30 @@
+{
+  "name": "agent-classifieds",
+  "private": true,
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.23.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "coordinator": "pnpm --filter @ac/coordinator dev",
+    "dashboard": "pnpm --filter @ac/dashboard dev",
+    "demo": "pnpm --filter @ac/scripts exec tsx demo.ts",
+    "scenario:summarize": "pnpm --filter @ac/scripts exec tsx scenario-summarize.ts",
+    "scenario:page": "pnpm --filter @ac/scripts exec tsx scenario-page-render.ts",
+    "scenario:research": "pnpm --filter @ac/scripts exec tsx scenario-research.ts",
+    "scenario:war": "pnpm --filter @ac/scripts exec tsx scenario-bidding-war.ts",
+    "present": "pnpm --filter @ac/scripts exec tsx demo-presenter.ts",
+    "invite": "pnpm --filter @ac/scripts exec tsx invite.ts",
+    "typecheck": "pnpm -r typecheck",
+    "build": "pnpm -r build"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.2",
+    "@types/node": "^22.9.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["better-sqlite3"]
+  }
+}

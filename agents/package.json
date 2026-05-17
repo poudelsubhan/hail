@@ -1,0 +1,35 @@
+{
+  "name": "@ac/agents",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./sdk": "./src/sdk/index.ts",
+    "./negotiate": "./src/sdk/negotiate.ts",
+    "./summarizer": "./src/summarizer.ts",
+    "./summarizer-pro": "./src/summarizer-pro.ts",
+    "./poster": "./src/poster.ts",
+    "./translator": "./src/translator.ts",
+    "./skeptic": "./src/skeptic.ts",
+    "./image-describer": "./src/image-describer.ts",
+    "./page-renderer": "./src/page-renderer.ts",
+    "./researcher": "./src/researcher.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "summarizer": "tsx src/summarizer.ts"
+  },
+  "dependencies": {
+    "@ac/contracts": "workspace:*",
+    "@ac/llm": "workspace:*",
+    "fastify": "^5.1.0",
+    "zod": "^3.23.8",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.2",
+    "@types/node": "^22.9.0",
+    "@types/ws": "^8.5.13"
+  }
+}
