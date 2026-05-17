@@ -345,6 +345,17 @@ export const dao = {
   distinctActiveUsersSince(sinceTs: number): number {
     return (stmts.distinctUsersSince.get(sinceTs) as { c: number }).c;
   },
+  /** Tear down a user and everything pointing at them (smoke cleanup).
+   *  Receipts + completed_contracts reference URIs, not user IDs, so they
+   *  are left intact as legitimate marketplace history. */
+  deleteUser(userId: string) {
+    return dao.tx(() => {
+      db.prepare("DELETE FROM wallets WHERE owner_user_id = ?").run(userId);
+      db.prepare("DELETE FROM agent_owners WHERE owner_user_id = ?").run(userId);
+      db.prepare("DELETE FROM invites WHERE consumed_by_user = ?").run(userId);
+      db.prepare("DELETE FROM users WHERE id = ?").run(userId);
+    });
+  },
   recentSignups(limit: number) {
     return stmts.recentSignups.all(limit) as {
       id: string;

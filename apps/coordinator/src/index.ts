@@ -18,6 +18,7 @@ import { walletsRoutes } from "./routes/wallets.js";
 import { registerAuth } from "./auth.js";
 import { bootstrapHost } from "./bootstrap.js";
 import { startDeadlineSweeper } from "./sweeper.js";
+import { runBootSmoke } from "./smoke-on-boot.js";
 import { setClaudeLogSink } from "@ac/llm";
 
 const PORT = Number(process.env.COORDINATOR_PORT ?? 8787);
@@ -103,6 +104,26 @@ startMetricsTick();
 // 2s deadline sweeper — refunds escrow, tanks reputation on timeout.
 startDeadlineSweeper({ logger: app.log });
 
-app.listen({ port: PORT, host: "0.0.0.0" }).then(() => {
+app.listen({ port: PORT, host: "0.0.0.0" }).then(async () => {
+  // Boot smoke — exercise the happy path end-to-end before serving real
+  // traffic. Set BOOT_SMOKE=0 to skip (local dev with a hot reload loop
+  // doesn't need it on every restart).
+  if (process.env.BOOT_SMOKE !== "0") {
+    const result = await runBootSmoke(app);
+    if (!result.ok) {
+      app.log.error(
+        { result },
+        `boot smoke FAILED at step "${result.error?.step}": ${result.error?.message}`,
+      );
+      try {
+        await app.close();
+      } catch {/* ignore */}
+      process.exit(1);
+    }
+    app.log.info(
+      { totalMs: result.totalMs, steps: result.steps },
+      `boot smoke PASSED in ${result.totalMs}ms`,
+    );
+  }
   app.log.info(`coordinator listening on :${PORT} (ws at /ws)`);
 });
