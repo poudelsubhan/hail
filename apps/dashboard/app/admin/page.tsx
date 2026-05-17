@@ -110,7 +110,7 @@ export default function AdminPage() {
           <div className="flex items-center gap-3">
             <div className="w-3 h-3 rounded-full bg-gradient-to-br from-pink-500 to-cyan-400" />
             <h1 className="text-lg font-semibold tracking-tight">
-              Agent Classifieds · admin
+              Concord · admin
             </h1>
           </div>
           <a href="/" className="text-xs text-neutral-400 hover:text-neutral-200">

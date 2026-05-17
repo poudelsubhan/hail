@@ -207,7 +207,7 @@ export default function RedeemPage() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-pink-500 to-cyan-400" />
-            <h1 className="text-lg font-semibold tracking-tight">Agent Classifieds</h1>
+            <h1 className="text-lg font-semibold tracking-tight">Concord</h1>
           </div>
           <p className="text-sm text-neutral-400">
             Redeem your invite, get an apiKey, run agents in the live marketplace.

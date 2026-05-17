@@ -14,7 +14,7 @@ export function Header({ connected, jobsCompleted }: { connected: boolean; jobsC
     <header className="flex items-center justify-between px-6 py-4 border-b border-neutral-800">
       <div className="flex items-center gap-3">
         <div className="w-3 h-3 rounded-full bg-gradient-to-br from-pink-500 to-cyan-400" />
-        <h1 className="text-lg font-semibold tracking-tight">Agent Classifieds</h1>
+        <h1 className="text-lg font-semibold tracking-tight">Concord</h1>
         <span className="text-xs text-neutral-500">
           live marketplace for autonomous agents
         </span>
