@@ -22,7 +22,7 @@ console.log(`--- booting agents (summarizer already up: ${summarizerAlreadyUp}) 
 
 const summarizer = summarizerAlreadyUp ? null : new SummarizerAgent(0);
 // Unique slug + auto-port so this can run alongside pnpm demo and other scenarios.
-const poster = new PosterAgent(0, `summarize-buyer-${process.pid}`);
+const poster = new PosterAgent(0, `summarize-buyer`);
 
 if (summarizer) await summarizer.start();
 await poster.start();

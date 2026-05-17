@@ -7,6 +7,12 @@ const FundReq = z.object({
   fromUsd: z.number().positive(),
 });
 
+const CreditReq = z.object({
+  walletId: z.string(),
+  amountUsd: z.number().positive(),
+  reason: z.string().default("admin-credit"),
+});
+
 export async function walletsRoutes(app: FastifyInstance) {
   // GET /wallets — public read-only view, used by the dashboard WalletStrip.
   // Returns id / agentUri / balance only — no owner identity. Phase 2's
@@ -32,6 +38,25 @@ export async function walletsRoutes(app: FastifyInstance) {
         balanceUsd: w.balance_usd,
       })),
     };
+  });
+
+  // POST /admin/credit — host-only escape hatch to top up any wallet (e.g.
+  // the host user-default after a long demo). Bypasses the funding-flow
+  // ownership check on purpose.
+  app.post("/admin/credit", async (req, reply) => {
+    if (!req.user) return reply.code(401).send({ error: "unauthenticated" });
+    if (!req.user.is_host) return reply.code(403).send({ error: "host_only" });
+    const parsed = CreditReq.safeParse(req.body);
+    if (!parsed.success) return reply.code(400).send({ error: parsed.error.flatten() });
+    try {
+      const balance = wallet.credit(parsed.data.walletId, parsed.data.amountUsd, parsed.data.reason);
+      return { walletId: parsed.data.walletId, balanceUsd: balance };
+    } catch (e) {
+      if (e instanceof WalletNotFoundError) {
+        return reply.code(404).send({ error: "wallet_not_found", walletId: e.walletId });
+      }
+      throw e;
+    }
   });
 
   // POST /wallets/:agentWalletId/fund — move money from user-default to an

@@ -29,7 +29,7 @@ ws.onmessage = (e) => {
 };
 await new Promise<void>((r) => { ws.onopen = () => r(); });
 
-const poster = new PosterAgent(0, `openhome-user-${process.pid}`);
+const poster = new PosterAgent(0, `openhome-user`);
 await poster.start();
 await new Promise((r) => setTimeout(r, 250));
 

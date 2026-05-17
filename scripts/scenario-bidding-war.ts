@@ -27,7 +27,7 @@ ws.onmessage = (e) => {
 };
 await new Promise<void>((r) => { ws.onopen = () => r(); });
 
-const poster = new PosterAgent(0, `auction-buyer-${process.pid}`);
+const poster = new PosterAgent(0, `auction-buyer`);
 await poster.start();
 await new Promise((r) => setTimeout(r, 250));
 

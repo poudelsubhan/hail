@@ -23,7 +23,7 @@ const rendererUp = await capabilityServed("render_page");
 console.log(`--- booting agents (page-renderer already up: ${rendererUp}) ---`);
 
 const renderer = rendererUp ? null : new PageRendererAgent(0);
-const poster = new PosterAgent(0, `coframe-buyer-${process.pid}`);
+const poster = new PosterAgent(0, `coframe-buyer`);
 
 if (renderer) await renderer.start();
 await poster.start();
