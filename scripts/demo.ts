@@ -19,6 +19,11 @@ import { PageRendererAgent } from "@ac/agents/page-renderer";
 import { ResearcherAgent } from "@ac/agents/researcher";
 
 const COORD_URL = process.env.COORDINATOR_URL ?? "http://localhost:8787";
+// Each agent binds a local HTTP port for its routes (e.g. page-renderer's
+// /pages/:id). Default base is 9101. Override with AGENT_PORT_BASE when
+// running a second demo against a different coord (e.g. cloud) alongside
+// a local stack on 9101–9107.
+const PORT_BASE = Number(process.env.AGENT_PORT_BASE ?? 9101);
 
 async function coordinatorAlive(): Promise<boolean> {
   try {
@@ -54,13 +59,13 @@ async function main() {
   const coord = await bootCoordinator();
 
   const agents = [
-    new SummarizerAgent(9101),
-    new TranslatorAgent(9102),
-    new SkepticAgent(9103),
-    new ImageDescriberAgent(9104),
-    new PageRendererAgent(9105),
-    new ResearcherAgent(9106),
-    new SummarizerProAgent(9107),
+    new SummarizerAgent(PORT_BASE + 0),
+    new TranslatorAgent(PORT_BASE + 1),
+    new SkepticAgent(PORT_BASE + 2),
+    new ImageDescriberAgent(PORT_BASE + 3),
+    new PageRendererAgent(PORT_BASE + 4),
+    new ResearcherAgent(PORT_BASE + 5),
+    new SummarizerProAgent(PORT_BASE + 6),
   ];
 
   for (const a of agents) {
