@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { dao, generateApiKey, generateInviteCode, nanoid, sha256, userWalletId } from "../db/index.js";
+import { store } from "../store.js";
 
 const SignupReq = z.object({
   inviteCode: z.string().min(4),
@@ -103,6 +104,26 @@ export async function authRoutes(app: FastifyInstance) {
       handle: user.handle,
       balanceUsd: user.balance_usd,
     };
+  });
+
+  // DELETE /admin/users/:userId — host-only nuke. Cascades wallets,
+  // agent_owners, invites in a tx. Receipts/completed_contracts persist
+  // (URI-keyed, not user-keyed) as legitimate marketplace history.
+  // Also removes the user's agents from the in-memory registry so the
+  // dashboard agent strip stops showing them.
+  app.delete("/admin/users/:userId", async (req, reply) => {
+    if (!req.user) return reply.code(401).send({ error: "unauthenticated" });
+    if (!req.user.is_host) return reply.code(403).send({ error: "host_only" });
+    const { userId } = req.params as { userId: string };
+    const target = dao.findUserById(userId);
+    if (!target) return reply.code(404).send({ error: "user_not_found" });
+    if (target.is_host) return reply.code(409).send({ error: "cannot_delete_host" });
+    const uris = dao.agentsForUser(userId).map((r) => r.uri);
+    dao.deleteUser(userId);
+    for (const uri of uris) {
+      store.agents.delete(uri as `agent://${string}`);
+    }
+    return { ok: true, deletedUserId: userId, removedAgents: uris };
   });
 
   // GET /admin/recent — host-only: last N signups for "who just joined" awareness.
