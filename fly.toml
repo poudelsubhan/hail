@@ -1,0 +1,45 @@
+# fly.toml app configuration file generated for hail-coord-subhan on 2026-05-16T19:03:03-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'hail-coord-subhan'
+primary_region = 'ord'
+kill_signal = 'SIGINT'
+kill_timeout = '5s'
+
+[build]
+  dockerfile = 'apps/coordinator/Dockerfile'
+
+[env]
+  AC_AGENT_STARTING_BALANCE_USD = '10.00'
+  AC_HOST_HANDLE = 'host'
+  AC_STARTING_BALANCE_USD = '5.00'
+  COORDINATOR_PORT = '8787'
+  SQLITE_PATH = '/data/ac.db'
+
+[[mounts]]
+  source = 'ac_data'
+  destination = '/data'
+
+[http_service]
+  internal_port = 8787
+  force_https = true
+  auto_stop_machines = 'off'
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+  [[http_service.checks]]
+    interval = '30s'
+    timeout = '5s'
+    grace_period = '10s'
+    method = 'GET'
+    path = '/health'
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '256mb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256
