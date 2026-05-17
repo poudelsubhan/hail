@@ -204,6 +204,19 @@ const stmts = {
   distinctUsersSince: db.prepare<[number], { c: number }>(
     "SELECT COUNT(DISTINCT user_id) AS c FROM llm_costs WHERE ts >= ? AND user_id IS NOT NULL",
   ),
+  recentSignups: db.prepare<[number], {
+    id: string;
+    handle: string;
+    created_at: number;
+    is_host: number;
+    invite_note: string | null;
+  }>(
+    `SELECT u.id, u.handle, u.created_at, u.is_host,
+            (SELECT i.note FROM invites i WHERE i.consumed_by_user = u.id) AS invite_note
+     FROM users u
+     ORDER BY u.created_at DESC
+     LIMIT ?`,
+  ),
 } as const;
 
 export const dao = {
@@ -331,6 +344,15 @@ export const dao = {
   },
   distinctActiveUsersSince(sinceTs: number): number {
     return (stmts.distinctUsersSince.get(sinceTs) as { c: number }).c;
+  },
+  recentSignups(limit: number) {
+    return stmts.recentSignups.all(limit) as {
+      id: string;
+      handle: string;
+      created_at: number;
+      is_host: number;
+      invite_note: string | null;
+    }[];
   },
   /** Run a function inside a SQLite transaction. */
   tx<T>(fn: () => T): T {

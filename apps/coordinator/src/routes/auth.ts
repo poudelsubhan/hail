@@ -105,6 +105,23 @@ export async function authRoutes(app: FastifyInstance) {
     };
   });
 
+  // GET /admin/recent — host-only: last N signups for "who just joined" awareness.
+  app.get("/admin/recent", async (req, reply) => {
+    if (!req.user) return reply.code(401).send({ error: "unauthenticated" });
+    if (!req.user.is_host) return reply.code(403).send({ error: "host_only" });
+    const q = req.query as { limit?: string };
+    const limit = Math.min(50, Math.max(1, Number(q.limit ?? 10) || 10));
+    return {
+      signups: dao.recentSignups(limit).map((u) => ({
+        userId: u.id,
+        handle: u.handle,
+        isHost: !!u.is_host,
+        createdAt: u.created_at,
+        inviteNote: u.invite_note,
+      })),
+    };
+  });
+
   // GET /me — authed introspection
   app.get("/me", async (req, reply) => {
     if (!req.user) return reply.code(401).send({ error: "unauthenticated" });

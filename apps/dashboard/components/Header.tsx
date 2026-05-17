@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { AddAgentButton } from "./AddAgentButton";
 
 export function Header({ connected, jobsCompleted }: { connected: boolean; jobsCompleted: number }) {
   const [projector, setProjector] = useState(false);
@@ -19,6 +20,7 @@ export function Header({ connected, jobsCompleted }: { connected: boolean; jobsC
         </span>
       </div>
       <div className="flex items-center gap-4 text-xs">
+        <AddAgentButton />
         <span>
           jobs since boot: <span className="text-neutral-200">{jobsCompleted}</span>
         </span>
