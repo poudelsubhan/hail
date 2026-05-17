@@ -191,6 +191,109 @@ fly machine restart -a hail-coord-subhan
 
 ---
 
+## Adding a new agent — exact stage flow
+
+This is the move you'll actually do on stage. Three terminals + two browser
+tabs already open from Pre-flight.
+
+### On stage (live)
+
+1. **Switch to /admin tab** (browser tab 2). Audience sees the admin panel.
+2. **Click "Generate"** (leave the note blank, or type the audience member's
+   name). A green card appears with the redeem URL.
+3. **Click "copy"** on the URL. Open a new browser tab. Paste, hit enter.
+   → You're on the redeem page with the invite code prefilled.
+4. **Type a handle** (e.g. `demo-2`). Hit "Redeem invite". The success card
+   shows your apiKey.
+5. **Click "copy"** on the apiKey.
+6. **Switch to Term 3.** Edit `.env`:
+   ```bash
+   cd ~/code/hail-starter
+   # paste:
+   #   AC_API_KEY=<the new apiKey you just copied>
+   #   AC_HANDLE=<the handle you picked>
+   ```
+   (Quick way without opening an editor — overwrite the file:)
+   ```bash
+   cat > .env <<EOF
+   AC_API_KEY=<paste>
+   AC_HANDLE=<paste>
+   COORDINATOR_URL=https://hail-coord-subhan.fly.dev
+   COORDINATOR_WS_URL=wss://hail-coord-subhan.fly.dev/ws
+   AGENT_PORT=0
+   EOF
+   ```
+7. **`npm start`** in Term 3.
+8. Console prints `[agent://<handle>.my-bot] online @ http://localhost:NNNNN`.
+9. Switch to dashboard (tab 1). The new agent appears in the agent strip on
+   the left + WalletStrip on the right with $5.
+10. **Bonus:** trigger Scenario 2 (`pnpm present` → press `2`) — the new
+    agent's capability is `summarize`, so it'll bid against the host
+    summarizers and might win one.
+
+### Rehearse it RIGHT NOW (before stage)
+
+Burn the `backup` invite (`8b230b23edff`) as your rehearsal so the two
+audience cards stay fresh:
+
+```bash
+# 1. Pretend you're the audience — open the redeem page:
+open "https://hail-dashboard.vercel.app/redeem?invite=8b230b23edff"
+
+# 2. Pick handle "rehearsal", click Redeem, copy the apiKey.
+
+# 3. Wire the starter:
+cd ~/code/hail-starter
+cat > .env <<'EOF'
+AC_API_KEY=<paste rehearsal apiKey>
+AC_HANDLE=rehearsal
+COORDINATOR_URL=https://hail-coord-subhan.fly.dev
+COORDINATOR_WS_URL=wss://hail-coord-subhan.fly.dev/ws
+AGENT_PORT=0
+EOF
+
+# 4. Boot it:
+npm start
+# expect: [agent://rehearsal.my-bot] online @ http://localhost:NNNNN
+
+# 5. Dashboard: rehearsal.my-bot appears in agent strip + wallet panel.
+
+# 6. Ctrl-C in Term 3 to stop the rehearsal agent.
+```
+
+### Remove the rehearsal user before the real demo
+
+After Ctrl-C, the user + wallets are still in the cloud DB and would
+clutter the dashboard. Nuke in one curl:
+
+```bash
+# Grab their userId from /admin/recent:
+USER_ID=$(curl -s -H "Authorization: Bearer ak_1ffb84d504e22618891a9517" \
+  https://hail-coord-subhan.fly.dev/admin/recent \
+  | python3 -c 'import json,sys; print(next(u["userId"] for u in json.load(sys.stdin)["signups"] if u["handle"]=="rehearsal"))')
+echo "deleting $USER_ID"
+
+# Delete (cascades wallets + agent_owners + invite + clears registry):
+curl -X DELETE \
+  -H "Authorization: Bearer ak_1ffb84d504e22618891a9517" \
+  https://hail-coord-subhan.fly.dev/admin/users/$USER_ID
+```
+
+Refresh dashboard → rehearsal agent + wallet are gone. Recent signups no
+longer shows them.
+
+### If you want a fresh invite to replace the burned one
+
+```bash
+curl -s -X POST -H "Authorization: Bearer ak_1ffb84d504e22618891a9517" \
+  -H "content-type: application/json" \
+  -d '{"note":"backup-2"}' \
+  https://hail-coord-subhan.fly.dev/invites \
+  | python3 -c 'import json,sys; d=json.load(sys.stdin); print(f"https://hail-dashboard.vercel.app/redeem?invite={d[\"code\"]}")'
+```
+
+---
+
 ## Tail-risk safeguard
 
 Record a 90-second screencap dry-run tonight in QuickTime → "New Screen
