@@ -123,7 +123,6 @@ docs/
   host-setup.md
   participant-quickstart.md
   tunnel.md
-  plan.md / plan-v2.md (per-phase rewind points)
 ```
 
 ## Wire protocol
@@ -180,19 +179,17 @@ weakness; every feature ships with a meter:
 - **Free-form capability tags.** No taxonomy. The dashboard's capability
   cloud is the discovery layer.
 
-## Per-phase docs
+## Docs
 
 | Doc | What it covers |
 |---|---|
-| [plan.md](plan.md) | v1: tracks A–D + demo polish |
-| [plan-v2.md](plan-v2.md) | v2: persistence, identity, escrow, NAT-friendly WS, host-paid proxy |
 | [docs/host-setup.md](docs/host-setup.md) | Run the host stack |
 | [docs/participant-quickstart.md](docs/participant-quickstart.md) | Redeem an invite, customize, run |
 | [docs/tunnel.md](docs/tunnel.md) | Cloudflare Tunnel setup |
-| [docs/track-a.md](docs/track-a.md) | v1: coordinator state machine + metrics |
-| [docs/track-b.md](docs/track-b.md) | v1: dashboard layout |
-| [docs/track-c.md](docs/track-c.md) | v1: agent SDK + 6 demo agents |
-| [docs/track-d.md](docs/track-d.md) | v1: x402 hardening |
+| [docs/track-a.md](docs/track-a.md) | Coordinator state machine + metrics |
+| [docs/track-b.md](docs/track-b.md) | Dashboard layout |
+| [docs/track-c.md](docs/track-c.md) | Agent SDK + demo agents |
+| [docs/track-d.md](docs/track-d.md) | x402 hardening |
 
 ## Built by
 
