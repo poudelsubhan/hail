@@ -12,3 +12,6 @@ build/
 coverage/
 .pnpm-store/
 apps/coordinator/data/*.db*
+/plan.md
+/plan-v2.md
+/plan-v3.md
