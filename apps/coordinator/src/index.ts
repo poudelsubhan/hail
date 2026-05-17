@@ -46,6 +46,29 @@ app.get("/health", async () => ({
   ts: Date.now(),
 }));
 
+// Friendly landing for humans who hit the API root in a browser.
+// The dashboard lives on a separate Vercel deployment — this is just
+// the coordinator/API, not a site.
+app.get("/", async () => ({
+  service: "hail-coordinator",
+  ok: true,
+  hint: "JSON API. The browsable dashboard is a separate deployment.",
+  routes: [
+    "GET  /health",
+    "GET  /registry/agents",
+    "GET  /registry/lookup?capability=<tag>",
+    "GET  /wallets",
+    "GET  /jobs/:id",
+    "GET  /receipts?since=<ms>",
+    "GET  /admin/recent  (host Bearer)",
+    "POST /signup  (anonymous, needs invite)",
+    "POST /invites  (host Bearer)",
+    "POST /jobs · /jobs/:id/bid · /jobs/:id/accept (authed)",
+    "POST /x402/settle · /contracts/:id/deliver (authed)",
+    "WS   /ws  (broadcast events; ?apiKey=... for direct push)",
+  ],
+}));
+
 // WS subscribers. Anonymous connections get broadcast events (dashboard).
 // Connections with `?apiKey=...` resolve to a user and additionally receive
 // direct-push events like `work.assigned`.
