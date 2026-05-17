@@ -9,7 +9,7 @@ import { SummarizerAgent } from "@ac/agents/summarizer";
 import { PosterAgent } from "@ac/agents/poster";
 import { capabilityServed } from "@ac/agents/sdk";
 
-const ws = new WebSocket("ws://localhost:8787/ws");
+const ws = new WebSocket(process.env.COORDINATOR_WS_URL ?? "ws://localhost:8787/ws");
 ws.onmessage = (e) => {
   const evt = JSON.parse(e.data as string);
   if (evt.type === "heartbeat" || evt.type === "metrics.tick") return;

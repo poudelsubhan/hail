@@ -31,7 +31,9 @@ export class PageRendererAgent extends BaseAgent {
     return {
       bid: true,
       priceUsd: Math.min(0.35, job.maxPriceUsd * 0.7),
-      etaSec: 12,
+      // Sonnet HTML render + WS round-trip from public coord can take 20–30s
+      // in prod. Sweeper deadline = etaSec * 2, so 45s gives 90s of cushion.
+      etaSec: 45,
       note: "Tailwind page from the brief.",
     };
   }
