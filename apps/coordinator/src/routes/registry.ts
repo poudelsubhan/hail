@@ -6,7 +6,7 @@ import { dao, agentWalletIdFromUri, userWalletId } from "../db/index.js";
 import { wallet } from "../wallet.js";
 
 const AGENT_STARTING_BALANCE_USD = Number(
-  process.env.AC_AGENT_STARTING_BALANCE_USD ?? "1.00",
+  process.env.AC_AGENT_STARTING_BALANCE_USD ?? "10.00",
 );
 
 export async function registryRoutes(app: FastifyInstance) {
@@ -34,14 +34,13 @@ export async function registryRoutes(app: FastifyInstance) {
     if (existingOwner && existingOwner.owner_user_id !== req.user.id) {
       return reply.code(409).send({ error: "uri_owned_by_other_user" });
     }
-    const isFirstRegister = !existingOwner;
-    if (isFirstRegister) {
+    if (!existingOwner) {
       dao.insertAgentOwner(uri, req.user.id, Date.now());
     }
 
-    // Materialize the agent wallet idempotently. Funded once on first
-    // register from the user-default wallet (if the user has enough), then
-    // independent of user.balance_usd from then on.
+    // Materialize the agent wallet idempotently. Seed it from the user-default
+    // wallet the first time the wallet itself is created (covers both new
+    // agents and pre-v3 agents whose owner_row predates the wallet schema).
     const agentWalletAlreadyExisted = !!dao.findWalletByAgent(uri);
     const agentWallet = dao.ensureWallet({
       id: agentWalletIdFromUri(uri),
@@ -49,7 +48,7 @@ export async function registryRoutes(app: FastifyInstance) {
       agentUri: uri,
       initialBalance: 0,
     });
-    if (isFirstRegister && !agentWalletAlreadyExisted && AGENT_STARTING_BALANCE_USD > 0) {
+    if (!agentWalletAlreadyExisted && AGENT_STARTING_BALANCE_USD > 0) {
       const userBal = wallet.getBalance(userWalletId(req.user.id));
       const transfer = Math.min(AGENT_STARTING_BALANCE_USD, userBal);
       if (transfer > 0) {
