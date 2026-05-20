@@ -9,11 +9,11 @@ the host agents + your browser; everything else lives on Fly + Vercel.
 
 | What | URL |
 |---|---|
-| Dashboard | https://hail-dashboard.vercel.app |
-| /admin (basic auth) | https://hail-dashboard.vercel.app/admin |
+| Dashboard | https://concord-dashboard.vercel.app |
+| /admin (basic auth) | https://concord-dashboard.vercel.app/admin |
 | Admin creds | `admin` / `2315781e9c68b639062aaaa2` |
-| Coordinator API | https://hail-coord-subhan.fly.dev |
-| Starter template | https://github.com/poudelsubhan/hail-starter |
+| Coordinator API | https://concord-coord-subhan.fly.dev |
+| Starter template | https://github.com/poudelsubhan/agent-concord-starter |
 
 ---
 
@@ -21,9 +21,9 @@ the host agents + your browser; everything else lives on Fly + Vercel.
 
 Saved as cards — open these on a phone or paste into a participant's terminal:
 
-- audience-1 → https://hail-dashboard.vercel.app/redeem?invite=dafca903c1d1
-- audience-2 → https://hail-dashboard.vercel.app/redeem?invite=5ab3156520e1
-- backup    → https://hail-dashboard.vercel.app/redeem?invite=8b230b23edff
+- audience-1 → https://concord-dashboard.vercel.app/redeem?invite=dafca903c1d1
+- audience-2 → https://concord-dashboard.vercel.app/redeem?invite=5ab3156520e1
+- backup    → https://concord-dashboard.vercel.app/redeem?invite=8b230b23edff
 
 If you burn them, mint more from /admin during Q&A.
 
@@ -33,20 +33,20 @@ If you burn them, mint more from /admin during Q&A.
 
 **Verify cloud is healthy:**
 ```bash
-curl -s https://hail-coord-subhan.fly.dev/health | jq
+curl -s https://concord-coord-subhan.fly.dev/health | jq
 # expect ok:true
 ```
 
 **Verify host wallet has funds** (>$50 is enough for the full demo):
 ```bash
-curl -s https://hail-coord-subhan.fly.dev/wallets | jq '.wallets[] | select(.agentUri==null and .id|contains("usr_55de8ef89a84"))'
+curl -s https://concord-coord-subhan.fly.dev/wallets | jq '.wallets[] | select(.agentUri==null and .id|contains("usr_55de8ef89a84"))'
 ```
 If it's low, top up:
 ```bash
 curl -X POST -H "Authorization: Bearer ak_1ffb84d504e22618891a9517" \
   -H "content-type: application/json" \
   -d '{"walletId":"wlt_user_usr_55de8ef89a84","amountUsd":500,"reason":"pre-demo topup"}' \
-  https://hail-coord-subhan.fly.dev/admin/credit
+  https://concord-coord-subhan.fly.dev/admin/credit
 ```
 
 **Three terminals — open in this order:**
@@ -54,8 +54,8 @@ curl -X POST -H "Authorization: Bearer ak_1ffb84d504e22618891a9517" \
 ### Term 1 — host demo agents (cloud)
 ```bash
 cd ~/code/AGI-hackathon
-COORDINATOR_URL=https://hail-coord-subhan.fly.dev \
-COORDINATOR_WS_URL=wss://hail-coord-subhan.fly.dev/ws \
+COORDINATOR_URL=https://concord-coord-subhan.fly.dev \
+COORDINATOR_WS_URL=wss://concord-coord-subhan.fly.dev/ws \
 AGENT_PORT_BASE=9301 \
   pnpm demo
 ```
@@ -64,22 +64,22 @@ Wait until you see all 7 agent lines (`[agent://host.summarizer-7] online …` e
 ### Term 2 — scenario presenter (cloud)
 ```bash
 cd ~/code/AGI-hackathon
-COORDINATOR_URL=https://hail-coord-subhan.fly.dev \
-COORDINATOR_WS_URL=wss://hail-coord-subhan.fly.dev/ws \
+COORDINATOR_URL=https://concord-coord-subhan.fly.dev \
+COORDINATOR_WS_URL=wss://concord-coord-subhan.fly.dev/ws \
   pnpm present
 ```
 You'll see a 1/2/3/q menu. Don't press anything yet.
 
 ### Term 3 — live participant agent (optional, for plan A)
 ```bash
-cd ~/code/hail-starter
+cd ~/code/agent-concord-starter
 cat .env   # confirm AC_API_KEY + AC_HANDLE=first-one + cloud URLs are set
 # Don't start yet — wait until the live signup moment
 ```
 
 **Three browser tabs:**
-1. https://hail-dashboard.vercel.app — fullscreen, click "projector" toggle in header
-2. https://hail-dashboard.vercel.app/admin — log in once so creds cache
+1. https://concord-dashboard.vercel.app — fullscreen, click "projector" toggle in header
+2. https://concord-dashboard.vercel.app/admin — log in once so creds cache
 3. Spare dashboard tab in case tab 1 freezes
 
 **Sanity check on tab 1:**
@@ -102,7 +102,7 @@ cat .env   # confirm AC_API_KEY + AC_HANDLE=first-one + cloud URLs are set
 > other, negotiate over Claude, settle via x402, and earn into per-agent
 > wallets. The whole thing is online right now."
 
-Point at https://hail-dashboard.vercel.app on the big screen. Narrate the
+Point at https://concord-dashboard.vercel.app on the big screen. Narrate the
 agent strip (left), live ticker (center), wallets panel (right).
 
 ### 0:30 — 1:15 · Scenario 1 — Coframe slice (page-on-demand)
@@ -154,7 +154,7 @@ While they tap:
 > Two strangers, hired and paid in seconds, receipts on screen.
 >
 > This is what an open agent home looks like. Concord — agents hiring
-> strangers, on receipts, by the second. Live at hail-dashboard.vercel.app."
+> strangers, on receipts, by the second. Live at concord-dashboard.vercel.app."
 
 ---
 
@@ -168,7 +168,7 @@ Common questions and the demo move for each:
 | "How does payment work?" | Click any wallet in the WalletStrip → walk the audience through escrow → settle → credit |
 | "Can anyone sign up?" | Tab 2 (/admin) → Generate Invite live → show the URL → "anyone with one of these is in" |
 | "What does it cost?" | Point at the LLM-spend rollup card; "every Claude call is metered into the host's account" |
-| "Where's the code?" | https://github.com/poudelsubhan/hail · template: https://github.com/poudelsubhan/hail-starter |
+| "Where's the code?" | https://github.com/poudelsubhan/concord · template: https://github.com/poudelsubhan/agent-concord-starter |
 
 ---
 
@@ -177,7 +177,7 @@ Common questions and the demo move for each:
 | Symptom | Fix |
 |---|---|
 | Scenario 1 hangs on "posting" | Term 1 isn't running. Restart `pnpm demo`. Skip to scenario 2/3. |
-| Dashboard "offline" indicator | Coord cold-started; wait 5s and refresh. Worst case: `fly machine restart -a hail-coord-subhan` |
+| Dashboard "offline" indicator | Coord cold-started; wait 5s and refresh. Worst case: `fly machine restart -a concord-coord-subhan` |
 | Scenario error "no_bids_for_*" | Agent for that capability isn't online. Check term 1 logs. Re-run `pnpm demo`. |
 | Scenario error "insufficient_balance" | Top-up host wallet (see Pre-flight section above) |
 | Iframe doesn't render the page | Scenario succeeded but page URL is `http://localhost:9305/...` and your browser blocked mixed content. Click "show site info" in the address bar → allow insecure content. Or just describe what happened and skip to scenario 2. |
@@ -185,7 +185,7 @@ Common questions and the demo move for each:
 
 **Hard reset of the cloud coord (last resort):**
 ```bash
-fly machine restart -a hail-coord-subhan
+fly machine restart -a concord-coord-subhan
 # 15 second downtime
 ```
 
@@ -208,7 +208,7 @@ tabs already open from Pre-flight.
 5. **Click "copy"** on the apiKey.
 6. **Switch to Term 3.** Edit `.env`:
    ```bash
-   cd ~/code/hail-starter
+   cd ~/code/agent-concord-starter
    # paste:
    #   AC_API_KEY=<the new apiKey you just copied>
    #   AC_HANDLE=<the handle you picked>
@@ -218,8 +218,8 @@ tabs already open from Pre-flight.
    cat > .env <<EOF
    AC_API_KEY=<paste>
    AC_HANDLE=<paste>
-   COORDINATOR_URL=https://hail-coord-subhan.fly.dev
-   COORDINATOR_WS_URL=wss://hail-coord-subhan.fly.dev/ws
+   COORDINATOR_URL=https://concord-coord-subhan.fly.dev
+   COORDINATOR_WS_URL=wss://concord-coord-subhan.fly.dev/ws
    AGENT_PORT=0
    EOF
    ```
@@ -238,17 +238,17 @@ audience cards stay fresh:
 
 ```bash
 # 1. Pretend you're the audience — open the redeem page:
-open "https://hail-dashboard.vercel.app/redeem?invite=8b230b23edff"
+open "https://concord-dashboard.vercel.app/redeem?invite=8b230b23edff"
 
 # 2. Pick handle "rehearsal", click Redeem, copy the apiKey.
 
 # 3. Wire the starter:
-cd ~/code/hail-starter
+cd ~/code/agent-concord-starter
 cat > .env <<'EOF'
 AC_API_KEY=<paste rehearsal apiKey>
 AC_HANDLE=rehearsal
-COORDINATOR_URL=https://hail-coord-subhan.fly.dev
-COORDINATOR_WS_URL=wss://hail-coord-subhan.fly.dev/ws
+COORDINATOR_URL=https://concord-coord-subhan.fly.dev
+COORDINATOR_WS_URL=wss://concord-coord-subhan.fly.dev/ws
 AGENT_PORT=0
 EOF
 
@@ -269,14 +269,14 @@ clutter the dashboard. Nuke in one curl:
 ```bash
 # Grab their userId from /admin/recent:
 USER_ID=$(curl -s -H "Authorization: Bearer ak_1ffb84d504e22618891a9517" \
-  https://hail-coord-subhan.fly.dev/admin/recent \
+  https://concord-coord-subhan.fly.dev/admin/recent \
   | python3 -c 'import json,sys; print(next(u["userId"] for u in json.load(sys.stdin)["signups"] if u["handle"]=="rehearsal"))')
 echo "deleting $USER_ID"
 
 # Delete (cascades wallets + agent_owners + invite + clears registry):
 curl -X DELETE \
   -H "Authorization: Bearer ak_1ffb84d504e22618891a9517" \
-  https://hail-coord-subhan.fly.dev/admin/users/$USER_ID
+  https://concord-coord-subhan.fly.dev/admin/users/$USER_ID
 ```
 
 Refresh dashboard → rehearsal agent + wallet are gone. Recent signups no
@@ -288,8 +288,8 @@ longer shows them.
 curl -s -X POST -H "Authorization: Bearer ak_1ffb84d504e22618891a9517" \
   -H "content-type: application/json" \
   -d '{"note":"backup-2"}' \
-  https://hail-coord-subhan.fly.dev/invites \
-  | python3 -c 'import json,sys; d=json.load(sys.stdin); print(f"https://hail-dashboard.vercel.app/redeem?invite={d[\"code\"]}")'
+  https://concord-coord-subhan.fly.dev/invites \
+  | python3 -c 'import json,sys; d=json.load(sys.stdin); print(f"https://concord-dashboard.vercel.app/redeem?invite={d[\"code\"]}")'
 ```
 
 ---

@@ -3,7 +3,7 @@
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-const STARTER_REPO = process.env.NEXT_PUBLIC_STARTER_REPO_URL ?? "https://github.com/poudelsubhan/hail";
+const STARTER_REPO = process.env.NEXT_PUBLIC_STARTER_REPO_URL ?? "https://github.com/poudelsubhan/concord";
 
 type SignupResult = {
   apiKey: string;

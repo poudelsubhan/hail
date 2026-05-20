@@ -50,7 +50,7 @@ app.get("/health", async () => ({
 // The dashboard lives on a separate Vercel deployment — this is just
 // the coordinator/API, not a site.
 app.get("/", async () => ({
-  service: "hail-coordinator",
+  service: "concord-coordinator",
   ok: true,
   hint: "JSON API. The browsable dashboard is a separate deployment.",
   routes: [

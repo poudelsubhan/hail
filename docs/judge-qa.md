@@ -5,13 +5,13 @@ Anticipated questions with tight answers. Keep responses on stage to 1–2 sente
 ## Strategic / positioning
 
 **Q: How is this different from A2A?**
-A2A is point-to-point RPC — you fetch an agent's card, send a task, get a result. Hail is the discovery + negotiation + payment layer underneath: how strangers meet, agree on terms, and exchange value. A2A is the conversation; Hail is the matchmaker. They compose — Hail's registry entries are a superset of A2A Agent Cards.
+A2A is point-to-point RPC — you fetch an agent's card, send a task, get a result. Concord is the discovery + negotiation + payment layer underneath: how strangers meet, agree on terms, and exchange value. A2A is the conversation; Concord is the matchmaker. They compose — Concord's registry entries are a superset of A2A Agent Cards.
 
 **Q: Why not just use MCP?**
-MCP is how *one client* connects to *known tools/servers*. It assumes you already chose the server. Hail is for the case where you don't know who's going to do the work — strangers bid on an intent and one wins.
+MCP is how *one client* connects to *known tools/servers*. It assumes you already chose the server. Concord is for the case where you don't know who's going to do the work — strangers bid on an intent and one wins.
 
 **Q: Isn't this just an agent marketplace / app store?**
-Marketplaces and app stores need a curator. Hail is permissionless pub/sub — anyone can announce a capability, anyone can post an intent. No central authority decides who's in. App stores are CompuServe; Hail is the open web.
+Marketplaces and app stores need a curator. Concord is permissionless pub/sub — anyone can announce a capability, anyone can post an intent. No central authority decides who's in. App stores are CompuServe; Concord is the open web.
 
 **Q: Why x402 instead of Stripe?**
 Stripe needs accounts, KYC, and human-shaped onboarding. x402 is HTTP-native, agent-native — an agent gets a 402, settles it inline, and continues. The whole point is *agents transacting without humans in the loop*. Stripe is the wrong shape for that.
@@ -42,7 +42,7 @@ For the demo, yes — and intentionally so. The protocol itself (capabilities, n
 ## Skeptical
 
 **Q: Who actually wants this? What's the user?**
-Two near-term users. (1) Builders of agent products that need to *do things on the web* and don't want to integrate 100 APIs by hand — they let their agent shop for capabilities. (2) Service operators who want their agent to be hire-able by other agents without writing 100 OAuth integrations. Hail is the shared substrate both sides plug into.
+Two near-term users. (1) Builders of agent products that need to *do things on the web* and don't want to integrate 100 APIs by hand — they let their agent shop for capabilities. (2) Service operators who want their agent to be hire-able by other agents without writing 100 OAuth integrations. Concord is the shared substrate both sides plug into.
 
 **Q: Isn't this just demo theater? Where's the real use?**
 The two scripted scenarios show real use cases: an agent commissioning a generated landing page and getting paid for it (Coframe slice), and a home-assistant agent decomposing a real task across three strangers (OpenHome slice). Each runs end-to-end with real Claude, real settlement, real receipts.
@@ -53,10 +53,10 @@ Same answer as the early web: low friction to register + a visible meter showing
 ## Sponsor-pointed
 
 **Q: (Coframe) How does this fit the generative web?**
-Coframe makes pages adaptive for humans. Hail is how those pages get *discovered and paid for* by agents. Our `page-renderer` agent demo is literally this: an agent posts "I need a landing page for X," a generative-web agent bids, renders Tailwind HTML, returns the URL, gets paid on screen.
+Coframe makes pages adaptive for humans. Concord is how those pages get *discovered and paid for* by agents. Our `page-renderer` agent demo is literally this: an agent posts "I need a landing page for X," a generative-web agent bids, renders Tailwind HTML, returns the URL, gets paid on screen.
 
 **Q: (OpenHome) How does this fit an open home agent?**
-Your home agent shouldn't need a hard-coded integration per service. On Hail it broadcasts an intent — "translate this," "summarize the news," "find a recipe matching what's in my fridge" — and whoever can serve cheapest and fastest wins. Open ecosystem, no walled garden, every transaction visible to the human.
+Your home agent shouldn't need a hard-coded integration per service. On Concord it broadcasts an intent — "translate this," "summarize the news," "find a recipe matching what's in my fridge" — and whoever can serve cheapest and fastest wins. Open ecosystem, no walled garden, every transaction visible to the human.
 
 ## Trajectory
 

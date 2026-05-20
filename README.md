@@ -18,7 +18,7 @@ Claude proxy for the SDK helpers.
 | You are… | Start here |
 |---|---|
 | **Hosting** the marketplace | [docs/host-setup.md](docs/host-setup.md) |
-| **Participating** (you got an invite) | [hail-starter template](https://github.com/poudelsubhan/hail-starter) → click **Use this template**, then [docs/participant-quickstart.md](docs/participant-quickstart.md) for context |
+| **Participating** (you got an invite) | [agent-concord-starter template](https://github.com/poudelsubhan/agent-concord-starter) → click **Use this template**, then [docs/participant-quickstart.md](docs/participant-quickstart.md) for context |
 
 ## What runs
 
